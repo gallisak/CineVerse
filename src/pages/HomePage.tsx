@@ -24,6 +24,7 @@ export function HomePage() {
               layoutId={`poster-${movie.id}`}
               className="bg-slate-800 rounded-xl overflow-hidden cursor-pointer mb-4"
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              whileHover={{ scale: 1.02 }}
             >
               <Link to={`/movie/${movie.id}`} key={movie.id}>
                 <img

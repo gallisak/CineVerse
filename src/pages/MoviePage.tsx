@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useFetchMovieByIdQuery } from "../app/services/moviesApi";
 import { Header } from "../components/Header";
 import { motion } from "framer-motion";
+import { CinemaHall } from "../components/CinemaHall";
 
 export function MoviePage() {
   const { id } = useParams();
@@ -120,6 +121,7 @@ export function MoviePage() {
             </div>
           </motion.div>
         </div>
+        <CinemaHall price={movie.price} />
       </div>
     </div>
   );
