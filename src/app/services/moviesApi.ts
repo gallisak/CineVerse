@@ -1,5 +1,5 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
 
 export interface Movie {
@@ -31,7 +31,25 @@ export const moviesApi = createApi({
         }
       },
     }),
+
+    fetchMovieById: builder.query<Movie, string>({
+      async queryFn(id) {
+        try {
+          const movieRef = doc(db, "movies", id);
+          const movieSnap = await getDoc(movieRef);
+
+          if (!movieSnap.exists()) {
+            return { error: "Movie not found" };
+          }
+
+          const movie = { id: movieSnap.id, ...movieSnap.data() } as Movie;
+          return { data: movie };
+        } catch (error) {
+          return { error: error };
+        }
+      },
+    }),
   }),
 });
 
-export const { useFetchMoviesQuery } = moviesApi;
+export const { useFetchMoviesQuery, useFetchMovieByIdQuery } = moviesApi;
