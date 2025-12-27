@@ -1,5 +1,12 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+  arrayUnion,
+} from "firebase/firestore";
 import { db } from "../../firebase";
 
 export interface Movie {
@@ -9,11 +16,13 @@ export interface Movie {
   backdropUrl: string;
   rating: number;
   price: number;
+  occupiedSeats?: number[];
 }
 
 export const moviesApi = createApi({
   reducerPath: "moviesApi",
   baseQuery: fakeBaseQuery(),
+  tagTypes: ["Movie"],
 
   endpoints: (builder) => ({
     fetchMovies: builder.query<Movie[], void>({
@@ -48,8 +57,30 @@ export const moviesApi = createApi({
           return { error: error };
         }
       },
+      providesTags: ["Movie"],
+    }),
+
+    updateSeats: builder.mutation<null, { id: string; newSeats: number[] }>({
+      async queryFn({ id, newSeats }) {
+        try {
+          const movieRef = doc(db, "movies", id);
+
+          await updateDoc(movieRef, {
+            occupiedSeats: arrayUnion(...newSeats),
+          });
+
+          return { data: null };
+        } catch (error) {
+          return { error: error };
+        }
+      },
+      invalidatesTags: ["Movie"],
     }),
   }),
 });
 
-export const { useFetchMoviesQuery, useFetchMovieByIdQuery } = moviesApi;
+export const {
+  useFetchMoviesQuery,
+  useFetchMovieByIdQuery,
+  useUpdateSeatsMutation,
+} = moviesApi;

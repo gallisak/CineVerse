@@ -1,11 +1,27 @@
 import { useParams } from "react-router-dom";
-import { useFetchMovieByIdQuery } from "../app/services/moviesApi";
+import {
+  useFetchMovieByIdQuery,
+  useUpdateSeatsMutation,
+} from "../app/services/moviesApi";
 import { Header } from "../components/Header";
 import { motion } from "framer-motion";
 import { CinemaHall } from "../components/CinemaHall";
+import { useState } from "react";
 
 export function MoviePage() {
   const { id } = useParams();
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+
+  const [updateSeats, { isLoading: mutationIsLoading }] =
+    useUpdateSeatsMutation();
+
+  const handleBuyTickets = async (seats: number[]) => {
+    if (!id) return;
+
+    await updateSeats({ id: id, newSeats: seats });
+
+    setIsBookingOpen(false);
+  };
 
   const {
     data: movie,
@@ -56,7 +72,10 @@ export function MoviePage() {
               className="w-full rounded-2xl shadow-[0_0_50px_rgba(255,255,255,0.1)] border border-slate-700 hover:scale-[1.02] transition-transform duration-500"
             />
 
-            <button className="md:hidden w-full mt-6 bg-rose-600 py-4 rounded-xl font-bold text-lg shadow-lg shadow-rose-600/30">
+            <button
+              onClick={() => setIsBookingOpen(true)}
+              className="md:hidden w-full mt-6 bg-rose-600 py-4 rounded-xl font-bold text-lg shadow-lg shadow-rose-600/30"
+            >
               Buy Ticket ({movie.price} $)
             </button>
           </motion.div>
@@ -115,13 +134,27 @@ export function MoviePage() {
 
               <div className="h-10 w-px bg-slate-600"></div>
 
-              <button className="flex-1 bg-linear-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-bold py-4 px-8 rounded-xl transition-all shadow-lg shadow-rose-900/40 hover:shadow-rose-900/60 transform hover:-translate-y-1">
+              <button
+                onClick={() => setIsBookingOpen(true)}
+                className="flex-1 bg-linear-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-bold py-4 px-8 rounded-xl transition-all shadow-lg shadow-rose-900/40 hover:shadow-rose-900/60 transform hover:-translate-y-1"
+              >
                 Select Seats
               </button>
             </div>
           </motion.div>
         </div>
-        <CinemaHall price={movie.price} />
+        {!isBookingOpen ? (
+          <div className="hidden"></div>
+        ) : (
+          <div className="mt-10">
+            <CinemaHall
+              mutationIsLoading={mutationIsLoading}
+              price={movie.price}
+              occupiedSeats={movie.occupiedSeats || []}
+              onBuy={handleBuyTickets}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
