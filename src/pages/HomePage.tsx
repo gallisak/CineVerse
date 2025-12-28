@@ -7,7 +7,7 @@ export function HomePage() {
   const { data: movies, isLoading, isError } = useFetchMoviesQuery();
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-neutral-950">
       <Header />
 
       <main className="text-white">
@@ -22,7 +22,7 @@ export function HomePage() {
             <motion.div
               key={movie.id}
               layoutId={`poster-${movie.id}`}
-              className="bg-slate-800 rounded-xl overflow-hidden cursor-pointer mb-4"
+              className="bg-neutral-800 rounded-sm overflow-hidden cursor-pointer mb-4"
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
               whileHover={{ scale: 1.02 }}
             >

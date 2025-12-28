@@ -31,7 +31,7 @@ export function Login() {
     <>
       <Header />
       <div className="h-screen flex justify-center items-center bg-gray-900">
-        <div className="flex justify-center py-10 px-20 items-center bg-gray-800 rounded-xl shadow-lg">
+        <div className="flex justify-center py-10 px-20 items-center bg-gray-800 rounded-sm shadow-lg">
           <button
             onClick={loginWithGoogle}
             className="flex items-center justify-center gap-3 bg-white text-gray-700 font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-200 border border-gray-200 w-full hover:bg-blue-500 cursor-pointer"

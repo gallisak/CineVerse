@@ -80,8 +80,8 @@ export function CinemaHall({
             onClick={handleBuyClick}
             className={`${
               mutationIsLoading
-                ? "bg-gray-500 w-1/2  font-bold py-4 px-8 rounded-xl transition-all transform hover:-translate-y-1"
-                : "w-1/2 bg-linear-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-bold py-4 px-8 rounded-xl transition-all shadow-lg shadow-rose-900/40 hover:shadow-rose-900/60 transform hover:-translate-y-1"
+                ? "bg-gray-500 w-1/2  font-bold py-4 px-8 rounded-sm transition-all transform hover:-translate-y-1"
+                : "w-1/2 bg-linear-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-bold py-4 px-8 rounded-sm transition-all shadow-lg shadow-rose-900/40 hover:shadow-rose-900/60 transform hover:-translate-y-1"
             }`}
           >
             {mutationIsLoading ? "Processing..." : "Buy Tickets"}

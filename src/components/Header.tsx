@@ -28,7 +28,7 @@ export function Header() {
       <div>
         <span className="text-white mr-3 font-medium">{name}</span>
         <Link
-          className="text-white bg-gray-700 p-2 pl-5 pr-5 lg:mr-5 mr-2 rounded-sm cursor-pointer"
+          className="text-white bg-neutral-900 p-2 pl-5 pr-5 lg:mr-5 mr-2 rounded-sm cursor-pointer"
           to="/login"
           onClick={handleLogout}
         >
