@@ -3,6 +3,9 @@ import {
   useFetchMovieByIdQuery,
   useUpdateSeatsMutation,
 } from "../app/services/moviesApi";
+import { useCreateOrderMutation } from "../app/services/ordersApi";
+import { useAuth } from "../app/hooks/useAuth";
+
 import { Header } from "../components/Header";
 import { motion } from "framer-motion";
 import { CinemaHall } from "../components/CinemaHall";
@@ -12,6 +15,7 @@ export function MoviePage() {
   const { id } = useParams();
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const hallRef = useRef<HTMLDivElement>(null);
+  const { id: userId } = useAuth();
 
   useEffect(() => {
     if (isBookingOpen && hallRef.current) {
@@ -19,15 +23,40 @@ export function MoviePage() {
     }
   }, [isBookingOpen]);
 
-  const [updateSeats, { isLoading: mutationIsLoading }] =
+  const [updateSeats, { isLoading: isUpdatingSeats }] =
     useUpdateSeatsMutation();
+  const [createOrder, { isLoading: isCreatingOrder }] =
+    useCreateOrderMutation();
+
+  const isProcessing = isUpdatingSeats || isCreatingOrder;
 
   const handleBuyTickets = async (seats: number[]) => {
-    if (!id) return;
+    if (!id || !movie || !userId) {
+      alert("Please login to buy tickets");
+      return;
+    }
 
-    await updateSeats({ id: id, newSeats: seats });
+    const orderData = {
+      userId: userId,
+      movieId: movie.id,
+      movieTitle: movie.title,
+      posterUrl: movie.posterUrl,
+      seats: seats,
+      totalPrice: seats.length * movie.price,
+      date: new Date().toLocaleString(),
+    };
 
-    setIsBookingOpen(false);
+    try {
+      await updateSeats({ id: id, newSeats: seats }).unwrap();
+
+      await createOrder(orderData).unwrap();
+
+      setIsBookingOpen(false);
+      alert("Tickets bought successfully! Check your profile");
+    } catch (error) {
+      console.error("Failed to buy tickets:", error);
+      alert("Something went wrong!");
+    }
   };
 
   const {
@@ -96,39 +125,16 @@ export function MoviePage() {
             }}
             className="flex-1 pt-10 md:pt-32"
           >
-            <div className="flex gap-3 text-sm text-cyan-400 font-medium mb-4 uppercase tracking-wider">
-              <span className="bg-neutral-800/80 px-3 py-1 rounded-md backdrop-blur-sm border border-neutral-700">
-                Action
-              </span>
-              <span className="bg-neutral-800/80 px-3 py-1 rounded-md backdrop-blur-sm border border-neutral-700">
-                Sci-Fi
-              </span>
-              <span className="bg-neutral-800/80 px-3 py-1 rounded-md backdrop-blur-sm border border-neutral-700">
-                IMAX
-              </span>
-            </div>
-
             <h1 className="text-4xl md:text-6xl font-black leading-tight mb-4 drop-shadow-xl">
               {movie.title}
             </h1>
 
             <div className="flex items-center gap-6 text-gray-300 mb-8">
-              <div className="flex items-center gap-2 text-yellow-400 font-bold text-xl">
-                {movie.rating}{" "}
-                <span className="text-gray-500 text-sm font-normal">/ 100</span>
-              </div>
-              <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
               <span>2h 45m</span>
-              <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
-              <span>2024</span>
             </div>
 
             <div className="max-w-2xl text-lg text-gray-300 leading-relaxed mb-10">
-              <p>
-                Return to Pandora in this thrilling sequel. Jake Sully and
-                Neytiri must protect their family from a new threat. Incredible
-                graphics and an emotional story await you.
-              </p>
+              <p>Return to Pandora...</p>
             </div>
 
             <div className="hidden md:flex items-center gap-6 p-6 bg-neutral-800/40 backdrop-blur-md rounded-sm border border-neutral-700/50 max-w-xl">
@@ -151,12 +157,13 @@ export function MoviePage() {
             </div>
           </motion.div>
         </div>
+
         {!isBookingOpen ? (
           <div className="hidden"></div>
         ) : (
           <div ref={hallRef} className="mt-10">
             <CinemaHall
-              mutationIsLoading={mutationIsLoading}
+              isSubmitting={isProcessing}
               price={movie.price}
               occupiedSeats={movie.occupiedSeats || []}
               onBuy={handleBuyTickets}

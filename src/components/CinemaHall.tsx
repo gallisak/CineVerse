@@ -1,18 +1,18 @@
 import { useState } from "react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 
 interface Props {
   price: number;
   occupiedSeats: number[];
   onBuy: (selectedSeats: number[]) => void;
-  mutationIsLoading: boolean;
+  isSubmitting: boolean;
 }
 
 export function CinemaHall({
   price,
   occupiedSeats,
   onBuy,
-  mutationIsLoading,
+  isSubmitting,
 }: Props) {
   const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
 
@@ -51,7 +51,7 @@ export function CinemaHall({
               whileHover={!isOccupied ? { scale: 1.2 } : {}}
               whileTap={!isOccupied ? { scale: 0.9 } : {}}
               className={`
-                w-5 h-5 sm:w-8 sm:h-8 rounded-t-lg rounded-b-sm  transition-colors
+                w-5 h-5 sm:w-8 sm:h-8 rounded-t-lg rounded-b-sm transition-colors
                 ${
                   isOccupied ? "bg-slate-700 cursor-not-allowed opacity-40" : ""
                 }
@@ -75,16 +75,20 @@ export function CinemaHall({
         <p className="text-gray-400">Total Price:</p>
         <div className="flex justify-center gap-6 mt-3">
           <p className="text-2xl font-bold">{selectedSeats.length * price} $</p>
+
           <button
-            disabled={selectedSeats.length === 0 || mutationIsLoading}
+            disabled={selectedSeats.length === 0 || isSubmitting}
             onClick={handleBuyClick}
-            className={`${
-              mutationIsLoading
-                ? "bg-gray-500 w-1/2  font-bold py-4 px-8 rounded-sm transition-all transform hover:-translate-y-1"
-                : "w-1/2 bg-linear-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-bold py-4 px-8 rounded-sm transition-all shadow-lg shadow-rose-900/40 hover:shadow-rose-900/60 transform hover:-translate-y-1"
-            }`}
+            className={`
+              font-bold py-4 px-8 rounded-sm transition-all transform 
+              ${
+                isSubmitting
+                  ? "bg-gray-500 w-1/2 cursor-wait"
+                  : "w-1/2 bg-linear-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white hover:-translate-y-1 shadow-lg shadow-rose-900/40"
+              }
+            `}
           >
-            {mutationIsLoading ? "Processing..." : "Buy Tickets"}
+            {isSubmitting ? "Processing..." : "Buy Tickets"}
           </button>
         </div>
       </div>
