@@ -4,7 +4,7 @@ import { auth, provider } from "../firebase";
 import { GoogleIcon } from "../components/GoogleIcon";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useAppSelector } from "../app/hooks";
+import { useAppSelector } from "../app/hooks/hooks";
 
 export function Login() {
   const navigate = useNavigate();

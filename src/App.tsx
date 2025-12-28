@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
-import { useAppDispatch } from "./app/hooks";
+import { useAppDispatch } from "./app/hooks/hooks";
 import { setUser, removeUser } from "./app/slices/userSlice";
 import { Routes, Route } from "react-router-dom";
 import { Login } from "./pages/Login";
