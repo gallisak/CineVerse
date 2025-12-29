@@ -4,8 +4,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 
 export function Header() {
-  const { name, isAuth } = useAppSelector((state) => ({
-    name: state.user?.name,
+  const { isAuth } = useAppSelector((state) => ({
     isAuth: !!state.user?.email,
   }));
 
@@ -25,8 +24,20 @@ export function Header() {
       >
         CineVerse
       </Link>
-      <div>
-        <span className="text-white mr-3 font-medium">{name}</span>
+
+      <div className="flex gap-2">
+        {isAuth ? (
+          <div className="flex items-center gap-4">
+            <Link
+              to="/profile"
+              className="text-white hover:text-rose-500 font-bold transition-colors"
+            >
+              My Profile
+            </Link>
+          </div>
+        ) : (
+          <Link to="/login">Sign In</Link>
+        )}
         <Link
           className="text-white bg-neutral-900 p-2 pl-5 pr-5 lg:mr-5 mr-2 rounded-sm cursor-pointer"
           to="/login"
