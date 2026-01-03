@@ -1,75 +1,85 @@
-# React + TypeScript + Vite
+# Cineverse — Interactive Movie Booking App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Cineverse** is a modern, full-stack web application for browsing movies and booking tickets in real-time. The project demonstrates advanced state management, interactive UI animations, and seamless backend integration.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Frontend:** React (Vite), TypeScript
+- **State Management:** Redux Toolkit, RTK Query
+- **Styling:** Tailwind CSS
+- **Animations:** Framer Motion
+- **Backend:** Firebase (Firestore Database, Authentication)
+- **Routing:** React Router DOM
 
-## React Compiler
+## Key Features
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+### 1. User Authentication
 
-Note: This will impact Vite dev & build performances.
+- Secure **Login and Registration** via Firebase Auth.
+- **Protected Routes:** Only authenticated users can access the booking system and profile page.
+- Persistent user sessions.
 
-## Expanding the ESLint configuration
+### 2. Smart Booking System
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Interactive Cinema Hall:** Visual representation of seats with dynamic states (Available, Selected, Occupied).
+- **Real-time Synchronization:** Occupied seats are updated instantly across all devices using RTK Query tags.
+- **Conflict Prevention:** Prevents double-booking of the same seat.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 3. User Profile & History
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **Order History:** Users can view their purchased tickets in a dedicated Profile page.
+- Detailed ticket information including movie title, seat numbers, total price, and purchase date.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 4. Immersive UI/UX
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Smooth page transitions and layout animations using **Framer Motion**.
+- Responsive "Dark Neon" design tailored for a cinematic experience.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Installation & Setup
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Follow these steps to run the project locally:
+
+1.  **Clone the repository:**
+
+    ```bash
+    git clone https://github.com/gallisak/cineverse.git
+    cd cineverse
+    ```
+
+2.  **Install dependencies:**
+
+    ```bash
+    npm install
+    ```
+
+3.  **Configure Environment Variables:**
+    Create a `.env` file in the root directory and add your Firebase configuration:
+
+    ```env
+    VITE_FIREBASE_API_KEY=your_api_key
+    VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+    VITE_FIREBASE_PROJECT_ID=your_project_id
+    VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+    VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+    VITE_FIREBASE_APP_ID=your_app_id
+    ```
+
+4.  **Run the development server:**
+    ```bash
+    npm run dev
+    ```
+
+## Key Learnings
+
+Building this project helped me master:
+
+- **Full-Stack Logic:** Connecting a React Frontend with a Firebase NoSQL database.
+- **Advanced Redux:** Using **RTK Query** for caching, optimistic updates, and managing server state.
+- **Complex UI State:** Handling seat selection logic and syncing it with the backend.
+- **Animation Libraries:** Using Framer Motion for `layoutId` transitions and micro-interactions.
+
+## Contact
+
+**Created by:** gallisak
+
+- **Email:** [agalchisak@gmail.com](mailto:agalchisak@gmail.com)
